@@ -7,7 +7,7 @@ Düşük kaynaklı cihazlarda yerel muhakemeyi çevrimdışı bilgi paketleri ve
 ## Mimari genel bakış
 
 ```mermaid
-flowchart LR
+flowchart TD
     U["Kullanıcı sorusu"] --> P["Politika katmanı<br/>görev · güncellik · gizlilik"]
 
     P -->|"Dış bilgi gerekmiyor"| LM["Yerel model"]
