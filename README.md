@@ -6,33 +6,28 @@ Düşük kaynaklı cihazlarda yerel muhakemeyi çevrimdışı bilgi paketleri ve
 
 ## Mimari genel bakış
 
-### LATCH-Web
-
 ```mermaid
 flowchart LR
     Q["Soru"] --> P["Politika<br/>görev · güncellik · gizlilik"]
-    P -->|"Yerel yanıt"| L["Yerel model"] --> LA["Yanıt"]
-    P -->|"Bilgi gerekli"| R{"Bilgi yolu"}
-    R -->|"Cache"| C["RAM önbelleği"]
-    R -->|"Çevrimdışı"| O["Belge paketi<br/>SQLite FTS5 / BM25"]
-    R -->|"Güncel bilgi"| W["Sınırlı web araması"]
-    C --> E["Bütçeli kanıt paketi"]
+    P -->|"Yerel"| LM["Yerel model"] --> A0["Yanıt"]
+    P -->|"Bilgi gerekli"| S{"Bilgi yolu"}
+    S -->|"RAM cache"| C["Önbellek"]
+    S -->|"Çevrimdışı"| O["Belge paketi<br/>FTS5 / BM25"]
+    S -->|"Güncel"| W["Canlı web<br/>sınırlı arama"]
+    C --> E["Kanıt paketi"]
     O --> E
     W --> E
     E --> G["Yerel üretici<br/>iddialar + kaynaklar"]
-    G --> V["Bağımsız NLI denetimi"]
+    G --> V["Bağımsız NLI"]
     V -->|"Destekli"| A["Kaynaklı yanıt"]
-    V -->|"Yetersiz / çelişkili"| X["Yanıtı sınırla veya çekimser kal"]
+    V -->|"Yetersiz"| X["Sınırla / çekimser kal"]
+
+    subgraph CORE["LATCH-Core · ayrı araştırma hipotezi"]
+        M["Döngülü küçük model"] --> F["Flash soğuk bellek"] --> B["Gecikme + kalite ölçümü"]
+    end
 ```
 
-### LATCH-Core
-
-```mermaid
-flowchart LR
-    M["Döngülü küçük model"] --> F["Flash üzerindeki soğuk bellek"] --> B["Eşit kaynak bütçelerinde gecikme ve kaliteyi ölç"]
-```
-
-LATCH-Web mevcut bir yerel modeli bilgi kaynakları arasında yöneten ürün hattıdır. LATCH-Core, flash erişim gecikmesini hesaplama sırasında örtme hipotezini sınayan ayrı bir araştırma hattıdır; LATCH-Web’in önkoşulu değildir.
+LATCH-Web mevcut bir yerel modeli bilgi kaynakları arasında yöneten ürün hattıdır. LATCH-Core flash erişim gecikmesini hesaplama sırasında örtme hipotezini sınar; LATCH-Web’in önkoşulu değildir.
 
 ## Makale
 
